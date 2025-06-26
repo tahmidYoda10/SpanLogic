@@ -1,0 +1,115 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// Function to merge two sorted subarrays
+void merge(int arr[], int start, int mid, int end) {
+    // Calculate sizes of left and right subarrays
+    int n1 = mid - start + 1;  // Size of left subarray
+    int n2 = end - mid;        // Size of right subarray
+    
+    // Create temporary arrays
+    int left[n1], right[n2];
+    
+    // Copy data to left array
+    for(int i = 0; i < n1; i++)
+        left[i] = arr[start + i];
+    
+    // Copy data to right array
+    for(int i = 0; i < n2; i++)
+        right[i] = arr[mid + 1 + i];
+    
+    // Merge the two arrays back into arr[start..end]
+    int i = 0, j = 0, k = start;
+    
+    // Compare elements and merge in sorted order
+    while(i < n1 && j < n2) {
+        if(left[i] <= right[j]) {
+            arr[k] = left[i];
+            i++;
+        } else {
+            arr[k] = right[j];
+            j++;
+        }
+        k++;
+    }
+    
+    // Copy remaining elements of left array
+    while(i < n1) {
+        arr[k] = left[i];
+        i++;
+        k++;
+    }
+    
+    // Copy remaining elements of right array
+    while(j < n2) {
+        arr[k] = right[j];
+        j++;
+        k++;
+    }
+}
+
+// Recursive merge sort function
+void mergeSort(int arr[], int start, int end) {
+    if(start < end) {
+        // Find middle point
+        int mid = (start + end) / 2;
+        
+        // Sort first half
+        mergeSort(arr, start, mid);
+        
+        // Sort second half
+        mergeSort(arr, mid + 1, end);
+        
+        // Merge the sorted halves
+        merge(arr, start, mid, end);
+    }
+}
+
+// Function to merge two arrays into one
+void mergeArrays(int a[], int b[], int c[], int n1, int n2) {
+    // Copy elements from first array
+    for(int i = 0; i < n1; i++)
+        c[i] = a[i];
+    
+    // Copy elements from second array
+    for(int i = 0; i < n2; i++)
+        c[n1 + i] = b[i];
+}
+
+int main() {
+    int a[100], b[100], c[200];
+    int n1, n2;
+    
+    // Input first array
+    cout << "Enter size of array a: ";
+    cin >> n1;
+    cout << "Enter elements of array a: ";
+    for(int i = 0; i < n1; i++)
+        cin >> a[i];
+    
+    // Input second array
+    cout << "Enter size of array b: ";
+    cin >> n2;
+    cout << "Enter elements of array b: ";
+    for(int i = 0; i < n2; i++)
+        cin >> b[i];
+    
+    // Merge both arrays
+    mergeArrays(a, b, c, n1, n2);
+    
+    // Display merged array
+    cout << "After merge: ";
+    for(int i = 0; i < n1 + n2; i++)
+        cout << c[i] << " ";
+    
+    // Sort the merged array
+    mergeSort(c, 0, n1 + n2 - 1);
+    
+    // Display sorted array
+    cout << "\nAfter merge sort: ";
+    for(int i = 0; i < n1 + n2; i++)
+        cout << c[i] << " ";
+    cout << endl;
+    
+    return 0;
+}
